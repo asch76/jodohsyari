@@ -1,0 +1,8 @@
+TODO
+
+- bikin modul registrasi
+    - form registrasi awal simple aja, kalo sudah verifikasi email & pembayaran baru lengkapi biodatata
+    - admin user
+    - verifikasi user by email
+    - verifikasi pembayaran
+    - notifikasi via email untuk pendaftaran, verifikasi pembayaran, 
