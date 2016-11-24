@@ -15,5 +15,7 @@ require('laravel-elixir-vue-2');
 
 elixir((mix) => {
     mix.sass('app.scss')
+       .styles(['summernote.css', 'font-awesome.min.css'])
+       .scripts(['summernote.min.js', 'main.js'])
        .webpack('app.js');
 });

@@ -12,6 +12,7 @@
 
     <!-- Styles -->
     <link href="/css/app.css" rel="stylesheet">
+    <link href="/css/all.css" rel="stylesheet">
 
     <!-- Scripts -->
     <script>
@@ -36,7 +37,7 @@
 
                     <!-- Branding Image -->
                     <a class="navbar-brand" href="{{ url('/') }}">
-                        {{ config('app.name', 'Laravel') }}
+                        JODOHSYARI.COM
                     </a>
                 </div>
 
@@ -48,29 +49,64 @@
 
                     <!-- Right Side Of Navbar -->
                     <ul class="nav navbar-nav navbar-right">
+                        @foreach(\App\Post::page()->published()->get() as $page)
+                        <li class="@if (url()->current() == url('/post/'.$page->id.'-'.str_slug($page->title))) active @endif">
+                            <a href="{{ url('/post/'.$page->id.'-'.str_slug($page->title)) }}">
+                                {{ $page->title }}
+                            </a>
+                        </li>
+                        @endforeach
+
+                        <li class="@if (url()->current() == url('/post')) active @endif">
+                            <a href="{{ url('/post') }}">Artikel & Video</a>
+                        </li>
                         <!-- Authentication Links -->
                         @if (Auth::guest())
-                            <li><a href="{{ url('/login') }}">Login</a></li>
-                            <li><a href="{{ url('/register') }}">Register</a></li>
+                            <li><a href="{{ url('/login') }}">
+                                <i class="fa fa-sign-in"></i> Login
+                            </a></li>
+                            <li><a href="{{ url('/register') }}">
+                                <i class="fa fa-edit"></i> Register
+                            </a></li>
                         @else
+                            <li class="@if (url()->current() == url('/me')) active @endif">
+                                <a href="/me">
+                                    <i class="fa fa-user"></i>
+                                    <!-- {{ Auth::user()->name }} -->
+                                </a>
+                            </li>
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                                    {{ Auth::user()->name }} <span class="caret"></span>
+                                    <i class="fa fa-bell"></i>
+                                    <sup><span class="badge" style="font-size:8px;">2</span></sup>
+
                                 </a>
 
                                 <ul class="dropdown-menu" role="menu">
                                     <li>
-                                        <a href="{{ url('/logout') }}"
-                                            onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                            Logout
+                                        <a href="{{ url('/logout') }}">
+                                            Ini nitifikasi kok bro. Ini nitifikasi kok bro...<br>
+                                            <span class="text-muted">2 mins ago</span>
                                         </a>
-
-                                        <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
-                                            {{ csrf_field() }}
-                                        </form>
+                                    </li>
+                                    <li>
+                                        <a href="{{ url('/logout') }}">
+                                            Ini nitifikasi kok bro...<br>
+                                            <span class="text-muted">2 mins ago</span>
+                                        </a>
                                     </li>
                                 </ul>
+                            </li>
+                            <li>
+                                <a href="{{ url('/logout') }}"
+                                    onclick="event.preventDefault();
+                                             document.getElementById('logout-form').submit();">
+                                    <i class="fa fa-sign-out"></i>
+                                </a>
+
+                                <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
+                                    {{ csrf_field() }}
+                                </form>
                             </li>
                         @endif
                     </ul>
@@ -78,10 +114,48 @@
             </div>
         </nav>
 
-        @yield('content')
+        <div class="container">
+            @if (isset($breadcrumb))
+                @include('layouts._breadcrumb')
+            @endif
+
+            @yield('content')
+        </div>
+
+        <div class="footer" style="background:#FFF;">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4">
+                        <h6>NAVIGASI</h6>
+                        <ul class="list-unstyled">
+                            @foreach(\App\Post::page()->published()->get() as $page)
+                            <li>
+                                <a href="{{ url('/post/'.$page->id.'-'.str_slug($page->title)) }}">
+                                    {{ $page->title }}
+                                </a>
+                            </li>
+                            @endforeach
+                        </ul>
+                    </div>
+                    <div class="col-md-4">
+                        <h6>TEMUKAN KAMI</h6>
+                    </div>
+                    <div class="col-md-4">
+                        <h6>HUBUNGI KAMI</h6>
+                    </div>
+                </div>
+
+                <hr>
+
+                <div class="text-center">
+                    &copy; {{ date('Y') }} - JodohSyari.Com
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Scripts -->
     <script src="/js/app.js"></script>
+    <script src="/js/all.js"></script>
 </body>
 </html>

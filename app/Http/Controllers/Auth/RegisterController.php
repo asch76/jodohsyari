@@ -62,10 +62,29 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => bcrypt($data['password']),
-        ]);
+        return User::create($data);
+    }
+
+    public function register(RegisterRequest $request)
+    {
+		$data 				= $request->all();
+		$data['confirm'] 	= $request->password;
+		$data['password'] 	= bcrypt($request->password);
+		$data['api_token']	= str_random(60);
+
+		if ($request->hasFile('foto')) {
+
+            $file = $request->file('foto');
+
+            $fileName = time().'_'.$file->getClientOriginalName();
+            $file->move('uploads/images/', $fileName);
+
+            $data['foto'] = 'uploads/images/'.$fileName;
+
+        }
+
+        event(new Registered($user = $this->create($data)));
+        $this->guard()->login($user);
+        return redirect($this->redirectPath());
     }
 }

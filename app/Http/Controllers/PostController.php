@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\PostRequest;
+use App\Post;
 
 class PostController extends Controller
 {
@@ -11,9 +13,30 @@ class PostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        return view('post.index', [
+            'posts' => Post::published()->post()->latest()
+                        ->when($request->kategori, function($query) use($request) {
+                            return $query->where('kategori', 'LIKE', $request->kategori);
+                        })->paginate(10),
+            'breadcrumb' => [
+                '/post' => 'POST',
+                '#' => 'INDEX'
+            ]
+        ]);
+    }
+
+    public function admin(Request $request)
+    {
+        return view('post.admin', [
+            'posts' => Post::when($request->title, function($query) use($request) {
+                        return $query->where('title', 'LIKE', '%'.str_replace(' ', '%', $request->q).'%');
+                    })->when($request->status, function($query) use($request) {
+                        return $query->where('status', $request->q);
+                    })->paginate(10),
+            'breadcrumb' => ['/post/admin' => 'POSTS', '#' => 'MANAGE']
+        ]);
     }
 
     /**
@@ -23,7 +46,10 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
+        return view('post.create', [
+            'post' => new Post,
+            'breadcrumb' => ['/post/admin' => 'POSTS', '#' => 'CREATE']
+        ]);
     }
 
     /**
@@ -32,9 +58,20 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(PostRequest $request)
     {
-        //
+        $data = $request->all();
+
+        if ($request->hasFile('img')) {
+
+            $file = $request->file('img');
+            $fileName = time().'_'.$file->getClientOriginalName();
+            $file->move('uploads/images/', $fileName);
+            $data['img'] = 'uploads/images/'.$fileName;
+        }
+
+        $post = Post::create($data);
+        return redirect('/post/'.$post->id.'/edit')->with('success', 'Data berhasil disimpan.');
     }
 
     /**
@@ -43,9 +80,21 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Post $post)
     {
-        //
+        $post->view += 1;
+        $post->save();
+
+        return view('post.show', [
+            'post' => $post,
+            'terkait' => Post::published()->post()
+                        ->where('kategori', $post->kategori)
+                        ->limit(4)->get(),
+            'breadcrumb' => [
+                '/post' => 'POST',
+                '#' => $post->title
+            ]
+        ]);
     }
 
     /**
@@ -54,9 +103,12 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Post $post)
     {
-        //
+        return view('post.edit', [
+            'post' => $post,
+            'breadcrumb' => ['/post/admin' => 'POSTS', '#' => 'EDIT']
+        ]);
     }
 
     /**
@@ -66,9 +118,24 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(PostRequest $request, Post $post)
     {
-        //
+        $data = $request->all();
+
+        if ($request->hasFile('img')) {
+
+            $file = $request->file('img');
+            $fileName = time().'_'.$file->getClientOriginalName();
+            $file->move('uploads/images/', $fileName);
+            $data['img'] = 'uploads/images/'.$fileName;
+
+            if ($post->img && file_exists($post->img)) {
+    			unlink($post->img);
+    		}
+        }
+
+        $post->update($data);
+        return redirect('/post/'.$post->id.'/edit')->with('success', 'Data berhasil disimpan.');
     }
 
     /**
@@ -77,8 +144,14 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Post $post)
     {
-        //
+        $post->delete();
+
+        if ($post->img && file_exists($post->img)) {
+            unlink($post->img);
+        }
+
+        return redirect('/post/admin')->with('success', 'Data berhasil dihapus.');
     }
 }
