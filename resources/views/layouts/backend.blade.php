@@ -23,8 +23,8 @@
 </head>
 <body>
     <div id="app">
-        <nav class="navbar navbar-default navbar-static-top">
-            <div class="container-fluid">
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="container">
                 <div class="navbar-header">
 
                     <!-- Collapsed Hamburger -->
@@ -37,7 +37,7 @@
 
                     <!-- Branding Image -->
                     <a class="navbar-brand" href="{{ url('/admin') }}">
-                        JODOHSYARI.COM ADMIN PANEL
+                        JODOHSYARI.COM CMS
                     </a>
                 </div>
 
@@ -53,24 +53,22 @@
                         @if (Auth::guest())
                             <li><a href="{{ url('/login') }}">Login</a></li>
                         @else
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                                    {{ Auth::user()->name }} <span class="caret"></span>
+                            <li><a href="/post/admin?type=artikel">ARTIKEL</a></li>
+                            <li><a href="/post/admin?type=video">VIDEO</a></li>
+                            <li><a href="/post/admin?type=halaman">HALAMAN</a></li>
+                            <li><a href="/user/admin">USER</a></li>
+                            <li><a href="/invoice/admin">INVOICE</a></li>
+                            <li><a href="/me"><i class="fa fa-user"></i></a></li>
+                            <li>
+                                <a title="Logout" href="{{ url('/logout') }}"
+                                    onclick="event.preventDefault();
+                                             document.getElementById('logout-form').submit();">
+                                    <i class="fa fa-sign-out"></i>
                                 </a>
 
-                                <ul class="dropdown-menu" role="menu">
-                                    <li>
-                                        <a href="{{ url('/logout') }}"
-                                            onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                            Logout
-                                        </a>
-
-                                        <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
-                                            {{ csrf_field() }}
-                                        </form>
-                                    </li>
-                                </ul>
+                                <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
+                                    {{ csrf_field() }}
+                                </form>
                             </li>
                         @endif
                     </ul>
@@ -78,7 +76,7 @@
             </div>
         </nav>
 
-        <div class="container-fluid">
+        <div class="container">
 
             @if (isset($breadcrumb))
                 @include('layouts._breadcrumb')
@@ -96,15 +94,7 @@
                 </div>
             @endif
 
-            <div class="row">
-                <div class="col-md-2">
-                    @include('layouts._admin-nav')
-                </div>
-
-                <div class="col-md-10">
-                    @yield('content')
-                </div>
-            </div>
+            @yield('content')
         </div>
     </div>
 

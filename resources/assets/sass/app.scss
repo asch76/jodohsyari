@@ -24,6 +24,10 @@
 	font-weight: bold;
 }
 
+body {
+    padding-top: 60px;
+}
+
 img.cover {
 	height: 100%;
 	width: 100%;
@@ -43,9 +47,53 @@ img.cover {
     padding: 20px 0;
 }
 
+.panel, .breadcrumb {
+    margin-bottom: 10px;
+}
+
 // .panel-default :not(.note-editor) .panel-heading a {
 //     color: #fff;
 // }
+
+.carousel-caption {
+    color: inherit;
+    text-shadow: none;
+    // left: 50%;
+    // right: 135px;
+    // top: 0;
+}
+
+.carousel-caption p {
+    font-size: 18px;
+}
+
+.carousel-control.right, .carousel-control.left {
+	background-image: none;
+}
+
+.carousel-control {
+	color: #000;
+}
+.carousel-control:hover {
+	color: #0084FF;
+}
+
+.carousel {
+    background: linear-gradient(#fff, #9efff2);
+    // background: linear-gradient(#fff, #9efff2);
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+.table > thead > tr > th, .table > thead > tr > td, .table > tbody > tr > th, .table > tbody > tr > td, .table > tfoot > tr > th, .table > tfoot > tr > td {
+    vertical-align: middle;
+}
+
+.text-bold {
+    font-weight: bold;
+}
 
 // Proses wizard
 .bs-wizard {margin-top: 40px;}

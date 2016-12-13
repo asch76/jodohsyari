@@ -1,7 +1,7 @@
 <div class="panel panel-default">
     <div class="panel-heading">
 
-        @if (auth()->user()->id == $user->id)
+        @if (auth()->check() && auth()->user()->id == $user->id)
             <a href="" class="pull-right" data-toggle="modal" data-target="#biodataModal" style="color:#fff;">
                 <i class="fa fa-edit"></i> Edit
             </a>
@@ -9,7 +9,7 @@
 
         BIODATA
     </div>
-    <table class="table table-striped   table-hover table-bordered">
+    <table class="table table-striped table-hover">
         <tbody>
             <tr>
                 <th class="th-label">Nama Lengkap</th>

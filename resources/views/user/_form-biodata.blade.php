@@ -23,9 +23,19 @@
               </div>
           </div>
 
-          <div class="form-group">
-              <label for="nomor_identitas">Nomor Identitas</label>
-              <input type="text" name="nomor_identitas" value="" class="form-control" placeholder="Nomor Identitas" required>
+          <div class="row">
+              <div class="col-sm-6">
+                  <div class="form-group">
+                      <label for="jenis_identitas">Jenis Identitas</label>
+                      <input type="text" name="jenis_identitas" value="" class="form-control" placeholder="Jenis Identitas" required>
+                  </div>
+              </div>
+              <div class="col-sm-6">
+                  <div class="form-group">
+                      <label for="nomor_identitas">Nomor Identitas</label>
+                      <input type="text" name="nomor_identitas" value="" class="form-control" placeholder="Nomor Identitas" required>
+                  </div>
+              </div>
           </div>
 
           <div class="row">

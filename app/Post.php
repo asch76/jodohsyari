@@ -10,13 +10,21 @@ class Post extends Model
     const STATUS_PUBLISHED = 1;
     const STATUS_ARCHIVED = 2;
 
-    const TYPE_POST = 0;
-    const TYPE_PAGE = 1;
+    const TYPE_ARTIKEL = 'artikel';
+    const TYPE_VIDEO = 'video';
+    const TYPE_HALAMAN = 'halaman';
 
     protected $fillable = [
         'title', 'content', 'img', 'kategori',
-        'video_url', 'type', 'status', 'view'
+        'video_url', 'type', 'status', 'view', 'slide'
     ];
+
+    protected $appends = ['url'];
+
+    public function getUrlAttribute()
+    {
+        return '/post/'.$this->id.'-'.str_slug($this->title);
+    }
 
     public function scopeDraft($query)
     {
@@ -33,14 +41,24 @@ class Post extends Model
         return $query->where('status', self::STATUS_ARCHIVED);
     }
 
-    public function scopePost($query)
+    public function scopeArtikel($query)
     {
-        return $query->where('type', self::TYPE_POST);
+        return $query->where('type', self::TYPE_ARTIKEL);
     }
 
-    public function scopePage($query)
+    public function scopeVideo($query)
     {
-        return $query->where('type', self::TYPE_PAGE);
+        return $query->where('type', self::TYPE_VIDEO);
+    }
+
+    public function scopeHalaman($query)
+    {
+        return $query->where('type', self::TYPE_HALAMAN);
+    }
+
+    public function scopeSlide($query)
+    {
+        return $query->where('slide', 1);
     }
 
     public function scopeFavorit($query)

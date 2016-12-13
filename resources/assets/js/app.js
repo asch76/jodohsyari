@@ -13,8 +13,27 @@ require('./bootstrap');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('example', require('./components/Example.vue'));
+// Vue.component('example', require('./components/Example.vue'));
+// var alamat = Vue.component('alamat', require('./components/Alamat.vue'));
+// var biodata = Vue.component('biodata', require('./components/Biodata.vue'));
+// var fisik = Vue.component('fisik', require('./components/Fisik.vue'));
+// var keluarga = Vue.component('keluarga', require('./components/Keluarga.vue'));
+// var kepribadian = Vue.component('kepribadian', require('./components/Kepribadian.vue'));
+// var pekerjaan = Vue.component('pekerjaan', require('./components/Pekerjaan.vue'));
+// var pendidikan = Vue.component('pendidikan', require('./components/Pendidikan.vue'));
+
 
 const app = new Vue({
-    el: '#app'
+    el: '#app',
+    data: {
+
+    },
+
+    methods: {
+
+    },
+
+    mounted: function() {
+
+    }
 });

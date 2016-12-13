@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
-@section('title', $user->nama_lengkap)
+@section('title', $user->name)
 @section('image', 'http://www.jodohsyari/'.$user->foto)
 @section('imageSquare', 'http://www.jodohsyari/'.$user->foto)
-@section('description', $user->profile)
+@section('description', $user->profil)
 
 @section('content')
 
@@ -26,7 +26,7 @@
                             @endif
                         </div>
                         <div class="col-md-9">
-                            <h2>{{ $user->nama_lengkap }} ({{ $user->nama_panggilan }})</h2>
+                            <h2>{{ $user->name }}</h2>
                             <hr>
                             <blockquote cite="{{ $user->nama_panggilan }}">
                                 <p>{{ $user->profile }}</p>
@@ -34,7 +34,7 @@
                         </div>
                     </div>
 
-                    @include('user._detail')
+                    include('user._detail')
                 </div>
             </div>
         </div>

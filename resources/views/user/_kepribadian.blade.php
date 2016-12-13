@@ -1,12 +1,20 @@
 <div class="panel panel-default">
     <div class="panel-heading">
-        @if (auth()->user()->id == $user->id)
+        @if (auth()->check() && auth()->user()->id == $user->id)
             <a href="" class="pull-right" data-toggle="modal" data-target="#kepribadianModal" style="color:#fff;"><i class="fa fa-edit"></i> Edit</a>
         @endif
-        
+
         KEPRIBADIAN
     </div>
-    <table class="table table-striped   table-hover table-bordered">
+    <div class="panel-body">
+        <h4>Profil Singkat</h4>
+        <p> {{ $user->profile }} </p>
+        <h4>Karakter Positif</h4>
+        <p> {{ $user->karakter_positif }} </p>
+        <h4>Karakter Negatif</h4>
+        <p> {{ $user->karakter_negatif }} </p>
+    </div>
+    <!-- <table class="table table-striped table-hover">
         <tbody>
             <tr>
                 <th class="th-label">Profil Singkat</th>
@@ -21,5 +29,5 @@
                 <td>{{ $user->karakter_negatif }}</td>
             </tr>
         </tbody>
-    </table>
+    </table> -->
 </div>

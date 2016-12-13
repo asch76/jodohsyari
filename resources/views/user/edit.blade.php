@@ -2,9 +2,13 @@
 
 @section('content')
 
-    <h3>EDIT USER</h3>
-    <hr>
-
-    @include('user._form', ['url' => '/user/'.$user->id, 'method' => 'PUT'])
+<div class="panel panel-default">
+    <div class="panel-heading">
+        EDIT USER
+    </div>
+    <div class="panel-body">
+        @include('user._form', ['url' => '/user/'.$user->id, 'method' => 'PUT'])
+    </div>
+</div>
 
 @endsection

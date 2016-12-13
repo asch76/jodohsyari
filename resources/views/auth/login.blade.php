@@ -1,23 +1,14 @@
 @extends('layouts.app')
 
 @section('content')
+    <br><br>
     <div class="row">
-        <div class="col-md-8">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    SELAMAT DATANG DI JODOHSYARI.COM
-                </div>
-                <div class="panel-body">
-
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="panel panel-default">
-                <div class="panel-heading">LOGIN</div>
-                <div class="panel-body">
-                    <form class="form-vertical" role="form" method="POST" action="{{ url('/login') }}">
-                        {{ csrf_field() }}
+        <div class="col-sm-4 col-sm-offset-4">
+            <form class="form-vertical" role="form" method="POST" action="{{ url('/login') }}">
+                {{ csrf_field() }}
+                <div class="panel panel-default text-center">
+                    <div class="panel-heading">FORM LOGIN</div>
+                    <div class="panel-body">
 
                         <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
                             <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" required autofocus placeholder="Username/Email">
@@ -39,21 +30,22 @@
                             @endif
                         </div>
 
-                        <div class="form-group">
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox" name="remember"> Ingat Saya
-                                </label>
-                            </div>
-                        </div>
+                        <input type="hidden" name="remember" value="1">
 
-                        <div class="form-group">
-                            <button type="submit" class="btn btn-primary">Login</button>
-                            <a class="btn btn-link" href="{{ url('/password/reset') }}">Lupa Password?</a>
-                        </div>
-                    </form>
+                        <!-- <div class="form-group">
+                            <div class="checkbox">
+                                <label> <input type="checkbox" name="remember"> Ingat Saya </label>
+                            </div>
+                        </div> -->
+                    </div>
+                    <div class="panel-footer">
+                        <button type="submit" class="btn btn-primary form-control">
+                            <i class="fa fa-sign-in"></i> LOGIN
+                        </button>
+                        <!-- <a class="btn btn-link" href="{{ url('/password/reset') }}">Lupa Password?</a> -->
+                    </div>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
 @endsection

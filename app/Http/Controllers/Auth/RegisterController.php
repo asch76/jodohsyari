@@ -6,6 +6,11 @@ use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Http\Request;
+use App\Http\Requests\RegisterRequest;
+use Illuminate\Auth\Events\Registered;
+use App\Notifications\Member\RegisterSucceed;
+
 
 class RegisterController extends Controller
 {
@@ -27,7 +32,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/biodata/create';
 
     /**
      * Create a new controller instance.
@@ -68,7 +73,6 @@ class RegisterController extends Controller
     public function register(RegisterRequest $request)
     {
 		$data 				= $request->all();
-		$data['confirm'] 	= $request->password;
 		$data['password'] 	= bcrypt($request->password);
 		$data['api_token']	= str_random(60);
 
@@ -79,12 +83,14 @@ class RegisterController extends Controller
             $fileName = time().'_'.$file->getClientOriginalName();
             $file->move('uploads/images/', $fileName);
 
-            $data['foto'] = 'uploads/images/'.$fileName;
+            $data['foto'] = '/uploads/images/'.$fileName;
 
         }
 
         event(new Registered($user = $this->create($data)));
+        $user->notify(new RegisterSucceed($user));
         $this->guard()->login($user);
         return redirect($this->redirectPath());
     }
+
 }

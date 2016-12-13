@@ -13,8 +13,33 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        'App\Events\SomeEvent' => [
-            'App\Listeners\EventListener',
+        'App\Events\UserRegistered' => [
+            'App\Listeners\SendRegisterNotification',
+            'App\Listeners\SendCriteriaMatchedNotification',
+        ],
+        'App\Events\InvoiceConfirmed' => [
+            'App\Listeners\SendInvoiceConfirmedNotification',
+        ],
+        'App\Events\InvoicePaid' => [
+            'App\Listeners\SendInvoicePaidNotification',
+        ],
+        'App\Events\NadzorRequested' => [
+            'App\Listeners\SendNadzorRequestedNotification',
+        ],
+        'App\Events\NadzorOk' => [
+            'App\Listeners\SendNadzorOkNotification',
+        ],
+        'App\Events\KhitbahRequested' => [
+            'App\Listeners\SendKhitbahRequestedNotification',
+        ],
+        'App\Events\KhitbahOk' => [
+            'App\Listeners\SendKhitbahOkNotification',
+        ],
+        'App\Events\NikahRequested' => [
+            'App\Listeners\SendNikahRequestedNotification',
+        ],
+        'App\Events\PostPublished' => [
+            'App\Listeners\SendPostPublishedNotification',
         ],
     ];
 

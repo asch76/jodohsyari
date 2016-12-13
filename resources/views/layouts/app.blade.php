@@ -23,7 +23,7 @@
 </head>
 <body>
     <div id="app">
-        <nav class="navbar navbar-default navbar-static-top">
+        <nav class="navbar navbar-default navbar-fixed-top">
             <div class="container">
                 <div class="navbar-header">
 
@@ -49,16 +49,18 @@
 
                     <!-- Right Side Of Navbar -->
                     <ul class="nav navbar-nav navbar-right">
-                        @foreach(\App\Post::page()->published()->get() as $page)
-                        <li class="@if (url()->current() == url('/post/'.$page->id.'-'.str_slug($page->title))) active @endif">
-                            <a href="{{ url('/post/'.$page->id.'-'.str_slug($page->title)) }}">
-                                {{ $page->title }}
-                            </a>
+                        @foreach(\App\Post::halaman()->published()->get() as $page)
+                        <li class="@if (url()->current() == $page->url) active @endif">
+                            <a href="{{ $page->url }}">{{ $page->title }}</a>
                         </li>
                         @endforeach
 
-                        <li class="@if (url()->current() == url('/post')) active @endif">
-                            <a href="{{ url('/post') }}">Artikel & Video</a>
+                        <li class="@if (url()->current() == url('/artikel')) active @endif">
+                            <a href="{{ url('/artikel') }}">Artikel</a>
+                        </li>
+
+                        <li class="@if (url()->current() == url('/video')) active @endif">
+                            <a href="{{ url('/video') }}">Video</a>
                         </li>
                         <!-- Authentication Links -->
                         @if (Auth::guest())
@@ -72,31 +74,31 @@
                             <li class="@if (url()->current() == url('/me')) active @endif">
                                 <a href="/me">
                                     <i class="fa fa-user"></i>
-                                    <!-- {{ Auth::user()->name }} -->
+                                    {{ Auth::user()->name }}
                                 </a>
                             </li>
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                                    <i class="fa fa-bell"></i>
-                                    <sup><span class="badge" style="font-size:8px;">2</span></sup>
+                                    <i class="fa fa-envelope"></i>
+                                    <sup><span class="badge" style="font-size:8px;">{{ auth()->user()->unreadNotifications->count() }}</span></sup>
 
                                 </a>
 
                                 <ul class="dropdown-menu" role="menu">
+                                    @foreach (auth()->user()->unreadNotifications as $n)
                                     <li>
-                                        <a href="{{ url('/logout') }}">
-                                            Ini nitifikasi kok bro. Ini nitifikasi kok bro...<br>
-                                            <span class="text-muted">2 mins ago</span>
+                                        <a href="{{ $n->data['url'] }}">
+                                            {{ $n->data['subject'] }}<br>
+                                            <span class="text-muted">{{ $n->created_at->diffForhumans() }}</span>
                                         </a>
                                     </li>
-                                    <li>
-                                        <a href="{{ url('/logout') }}">
-                                            Ini nitifikasi kok bro...<br>
-                                            <span class="text-muted">2 mins ago</span>
-                                        </a>
-                                    </li>
+                                    @endforeach
+                                    <li><a href="/notifikasi">Lihat Semua Notifikasi</a></li>
                                 </ul>
                             </li>
+                            @if (auth()->user()->role == 'admin')
+                            <li><a href="/admin">CMS</a></li>
+                            @endif
                             <li>
                                 <a href="{{ url('/logout') }}"
                                     onclick="event.preventDefault();
@@ -114,7 +116,9 @@
             </div>
         </nav>
 
-        <div class="container">
+        @yield('slider')
+
+        <div class="container" style="min-height:350px;">
             @if (isset($breadcrumb))
                 @include('layouts._breadcrumb')
             @endif
@@ -126,22 +130,27 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-4">
-                        <h6>NAVIGASI</h6>
+                        <h5>NAVIGASI</h5>
                         <ul class="list-unstyled">
-                            @foreach(\App\Post::page()->published()->get() as $page)
-                            <li>
-                                <a href="{{ url('/post/'.$page->id.'-'.str_slug($page->title)) }}">
-                                    {{ $page->title }}
-                                </a>
-                            </li>
+                            @foreach(\App\Post::halaman()->published()->get() as $page)
+                            <li><a href="{{ $page->url }}">{{ $page->title }}</a></li>
                             @endforeach
+                            <li><a href="/artikel">Artikel</a></li>
+                            <li><a href="/video">Video</a></li>
+                            @if (auth()->check())
+                                <li><a href="/me">Profil Saya</a></li>
+                                <li><a href="/notifikasi">Notifikasi</a></li>
+                                @if (auth()->user()->role == 'admin')
+                                    <li><a href="/admin">CMS</a></li>
+                                @endif
+                            @endif
                         </ul>
                     </div>
                     <div class="col-md-4">
-                        <h6>TEMUKAN KAMI</h6>
+                        <h5>TEMUKAN KAMI</h5>
                     </div>
                     <div class="col-md-4">
-                        <h6>HUBUNGI KAMI</h6>
+                        <h5>HUBUNGI KAMI</h5>
                     </div>
                 </div>
 

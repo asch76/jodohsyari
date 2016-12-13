@@ -1,12 +1,12 @@
 <div class="panel panel-default">
     <div class="panel-heading">
-        @if (auth()->user()->id == $user->id)
+        @if (auth()->check() && auth()->user()->id == $user->id)
             <a href="#" class="pull-right" data-toggle="modal" data-target="#pekerjaanModal" style="color:#fff;"><i class="fa fa-plus"></i> Tambah</a>
         @endif
 
         RIWAYAT PEKERJAAN
     </div>
-    <table class="table table-striped   table-hover table-bordered">
+    <table class="table table-striped table-hover">
         <thead>
             <tr>
                 <th>Perusahaan</th>

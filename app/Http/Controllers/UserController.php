@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Requests\BiodataRequest;
+use App\Http\Requests\UserRequest;
 use App\User;
 
 class UserController extends Controller
@@ -24,10 +24,13 @@ class UserController extends Controller
         ]);
     }
 
-    public function admin()
+    public function admin(Request $request)
     {
         return view('user.admin', [
-            'users' => User::paginate(),
+            'users' => User::when($request->q, function($query) use ($request) {
+                        $q = '%'.str_replace(' ', '%', $request->q).'%';
+                        return $query->where('name', 'LIKE', $q);
+                    })->orderBy('name')->paginate(),
             'breadcrumb' => [
                 'user/admin' => 'USER',
                 '#' => 'MANAGE'
@@ -51,20 +54,22 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(BiodataRequest $request)
+    public function store(UserRequest $request)
     {
         $data = $request->all();
+        $data['password'] 	= bcrypt($request->password);
+		$data['api_token']	= str_random(60);
 
         if ($request->hasFile('foto')) {
 
             $file = $request->file('foto');
             $fileName = time().'_'.$file->getClientOriginalName();
             $file->move('uploads/images/', $fileName);
-            $data['foto'] = 'uploads/images/'.$fileName;
+            $data['foto'] = '/uploads/images/'.$fileName;
         }
 
         $user = User::create($data);
-        return redirect('/user/edit/'.$user->id);
+        return redirect('/user/admin/')->with('success', 'Data berhasil disimpan');
     }
 
     /**
@@ -86,10 +91,20 @@ class UserController extends Controller
 
     public function me()
     {
-        return view('user.show', [
+        return view('user.me', [
             'user' => auth()->user(),
             'breadcrumb' => [
                 '/me' => 'ME',
+            ]
+        ]);
+    }
+
+    public function dashboard()
+    {
+        return view('user.dashboard', [
+            'user' => auth()->user(),
+            'breadcrumb' => [
+                '#' => 'DASHBOARD',
             ]
         ]);
     }
@@ -112,16 +127,17 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(BiodataRequest $request, User $user)
+    public function update(UserRequest $request, User $user)
     {
         $data = $request->all();
+        $data['password'] 	= bcrypt($request->password);
 
         if ($request->hasFile('foto')) {
 
             $file = $request->file('foto');
             $fileName = time().'_'.$file->getClientOriginalName();
             $file->move('uploads/images/', $fileName);
-            $data['foto'] = 'uploads/images/'.$fileName;
+            $data['foto'] = '/uploads/images/'.$fileName;
 
             if ($user->foto && file_exists($user->foto)) {
     			unlink($user->foto);
@@ -129,7 +145,7 @@ class UserController extends Controller
         }
 
         $user->update($data);
-        return redirect('/user/edit/'.$user->id);
+        return redirect('/user/admin/')->with('success', 'Data berhasil disimpan');
     }
 
     /**
@@ -146,6 +162,49 @@ class UserController extends Controller
             unlink($user->foto);
         }
 
+        return redirect('/user/admin');
+    }
+
+    public function notifikasi()
+    {
+        return view('user.notifikasi', [
+            'notifications' => auth()->user()->notifications()->paginate(),
+            'breadcrumb' => [
+                '#' => 'NOTIFIKASI'
+            ]
+        ]);
+    }
+
+    public function bacaNotifikasi($id)
+    {
+        auth()->user()->unreadNotifications()->where('id', $id)->first()->markAsread();
+        return redirect('/notifikasi');
+    }
+
+    public function hapusNotifikasi($id)
+    {
+        auth()->user()->notifications()->where('id', $id)->first()->delete();
+        return redirect('/notifikasi');
+    }
+
+    public function verify(User $user)
+    {
+        $user->verified = 1;
+        $user->save();
+        return redirect('/user/admin');
+    }
+
+    public function activate(User $user)
+    {
+        $user->active = 1;
+        $user->save();
+        return redirect('/user/admin');
+    }
+
+    public function deactivate(User $user)
+    {
+        $user->active = 0;
+        $user->save();
         return redirect('/user/admin');
     }
 }

@@ -1,7 +1,8 @@
 
 // Body
 // $body-bg: #f5f8fa;
-$body-bg: #a4ff9e;
+// $body-bg: #a4ff9e;
+$body-bg: #D4FFD1;
 
 // Borders
 $laravel-border-color: darken($body-bg, 10%);
@@ -20,8 +21,8 @@ $brand-danger: #bf5329;
 
 // Typography
 $font-family-sans-serif: "Nirmala UI", sans-serif;
-$font-size-base: 13px;
-$line-height-base: 1.6;
+// $font-size-base: 14px;
+// $line-height-base: 1.6;
 $text-color: #636b6f;
 
 // Navbar
@@ -49,7 +50,7 @@ $panel-default-text: #FFF;
 // Ubah beberapa
 $well-border: none;
 $well-bg: #fff;
-$grid-gutter-width: 20px;
+$grid-gutter-width: 10px;
 
 // Breadcrum
 $breadcrumb-bg: #FFF;

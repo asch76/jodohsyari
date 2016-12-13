@@ -1,74 +1,106 @@
-{!! Form::model($user, ['url' => $url, 'method' => $method, 'files' => true, 'class' => 'form-vertical']) !!}
+{!! Form::model($user, ['url' => $url, 'method' => $method, 'files' => true, 'class' => 'form-horizontal']) !!}
 
-<div class="row">
-	<div class="col-md-9">
-		<div class="well">
-			<div class="form-group{{ $errors->has('title') ? ' has-error' : '' }}">
-				{{ Form::text('title', $user->title, ['class' => 'form-control', 'placeholder' => 'Title']) }}
+	<div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
+		<label for="name" class="control-label col-sm-4">Name</label>
+		<div class="col-sm-4">
+			{{ Form::text('name', $user->name, ['class' => 'form-control', 'placeholder' => 'Name']) }}
 
-				@if ($errors->has('title'))
-				<span class="help-block">
-					<strong>{{ $errors->first('title') }}</strong>
-				</span>
-				@endif
-			</div>
-
-			<div class="form-group{{ $errors->has('content') ? ' has-error' : '' }}">
-				{{ Form::textarea('content', $user->content, ['class' => 'form-control summernote', 'placeholder' => 'Content']) }}
-
-				@if ($errors->has('content'))
-				<span class="help-block">
-					<strong>{{ $errors->first('content') }}</strong>
-				</span>
-				@endif
-			</div>
+			@if ($errors->has('name'))
+			<span class="help-block">
+				<strong>{{ $errors->first('name') }}</strong>
+			</span>
+			@endif
 		</div>
 	</div>
 
-	<div class="col-md-3">
-		<div class="well text">
-			<div class="form-group{{ $errors->has('img') ? ' has-error' : '' }}">
-				<input type="file" name="img" class="note-image-input form-control" placeholder="Thumbnail">
-				@if ($errors->has('img'))
-				<span class="help-block">
-					<strong>{{ $errors->first('img') }}</strong>
-				</span>
-				@endif
+	<div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
+		<label for="email" class="control-label col-sm-4">Email</label>
+		<div class="col-sm-4">
+			{{ Form::email('email', $user->email, ['class' => 'form-control', 'placeholder' => 'Email']) }}
 
-				@if ($user->img)
-				<br>
-				<img src="/{{ $user->img }}" alt="" class="img-responsive" />
-				@endif
-			</div>
-
-			<div class="form-group{{ $errors->has('status') ? ' has-error' : '' }}">
-				{{ Form::select('status', [0 => 'Draft', 1 => 'Published', 2 => 'Archived'], $user->status, ['class' => 'form-control', 'placeholder' => '-- Select Status --']) }}
-
-				@if ($errors->has('status'))
-				<span class="help-block">
-					<strong>{{ $errors->first('status') }}</strong>
-				</span>
-				@endif
-			</div>
-
-			<div class="form-group{{ $errors->has('type') ? ' has-error' : '' }}">
-				{{ Form::select('type', [0 => 'Post', 1 => 'Page'], $user->type, ['class' => 'form-control', 'placeholder' => '-- Select Type --']) }}
-
-				@if ($errors->has('type'))
-				<span class="help-block">
-					<strong>{{ $errors->first('type') }}</strong>
-				</span>
-				@endif
-			</div>
-
-			<hr>
-
-			<button type="sumbit" name="save" class="btn btn-info">SAVE</button>
+			@if ($errors->has('email'))
+			<span class="help-block">
+				<strong>{{ $errors->first('email') }}</strong>
+			</span>
+			@endif
 		</div>
 	</div>
-</div>
 
-<!-- <h3>POST GALLERY</h3>
-<hr> -->
+	<div class="form-group{{ $errors->has('role') ? ' has-error' : '' }}">
+		<label for="role" class="control-label col-sm-4">Role</label>
+		<div class="col-sm-4">
+			{{ Form::select('role', ['member' => 'Member', 'admin' => 'Admin'], $user->role, ['class' => 'form-control', 'placeholder' => '-- Select Role --']) }}
 
+			@if ($errors->has('role'))
+			<span class="help-block">
+				<strong>{{ $errors->first('role') }}</strong>
+			</span>
+			@endif
+		</div>
+	</div>
+
+	<div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
+		<label for="password" class="control-label col-sm-4">Password</label>
+		<div class="col-sm-4">
+			{{ Form::password('password', ['class' => 'form-control', 'placeholder' => 'Password']) }}
+
+			@if ($errors->has('password'))
+			<span class="help-block">
+				<strong>{{ $errors->first('password') }}</strong>
+			</span>
+			@endif
+		</div>
+	</div>
+
+	<div class="form-group{{ $errors->has('password_confirmation') ? ' has-error' : '' }}">
+		<label for="password_confirmation" class="control-label col-sm-4">Password Confirmation</label>
+		<div class="col-sm-4">
+			{{ Form::password('password_confirmation', ['class' => 'form-control', 'placeholder' => 'Password Confirmation']) }}
+
+			@if ($errors->has('password_confirmation'))
+			<span class="help-block">
+				<strong>{{ $errors->first('password_confirmation') }}</strong>
+			</span>
+			@endif
+		</div>
+	</div>
+
+	<div class="form-group{{ $errors->has('foto') ? ' has-error' : '' }}">
+		<label for="foto" class="control-label col-sm-4">Foto</label>
+		<div class="col-sm-4">
+			<input type="file" name="foto" class="note-image-input form-control" placeholder="Foto">
+			@if ($errors->has('foto'))
+			<span class="help-block">
+				<strong>{{ $errors->first('foto') }}</strong>
+			</span>
+			@endif
+
+			@if ($user->foto)
+			<br>
+			<img src="{{ $user->foto }}" alt="" class="img-responsive" style="width:200px;" />
+			@endif
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label for="verified" class="control-label col-sm-4">Verified</label>
+		<div class="col-sm-4">
+			<input type="checkbox" name="verified" value="1" @if($user->verified) checked @endif> Yes
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label for="active" class="control-label col-sm-4">Active</label>
+		<div class="col-sm-4">
+			<input type="checkbox" name="active" value="1" @if($user->active) checked @endif> Yes
+		</div>
+	</div>
+
+	<div class="form-group">
+		<div class="col-sm-offset-4">
+			<button type="sumbit" name="save" class="btn btn-primary">
+				<i class="fa fa-save"></i> SAVE
+			</button>
+		</div>
+	</div>
 {!! Form::close() !!}
